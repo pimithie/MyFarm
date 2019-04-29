@@ -13,19 +13,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cn.jxufe.bean.EasyUIData;
 import cn.jxufe.bean.EasyUIDataPageRequest;
 import cn.jxufe.bean.Message;
-import cn.jxufe.entity.Seed;
-import cn.jxufe.service.SeedService;
+import cn.jxufe.entity.GrowStage;
+import cn.jxufe.service.GrowStageService;
 
 @Controller
-@RequestMapping("/seed")
-public class SeedController {
+@RequestMapping("/growStage")
+public class GrowStageController {
 
 	@Autowired
-	private SeedService seedService;
+	private GrowStageService growStageService;
+	
 	
 	@ResponseBody
 	@RequestMapping("/find")
-	public EasyUIData<Seed> getPageData(@RequestBody EasyUIDataPageRequest pageRequest){
+	public EasyUIData<GrowStage> getPageData(@RequestBody EasyUIDataPageRequest pageRequest){
 		// log
 		System.out.println("pageRequest--page:"+pageRequest.getPage());
 		System.out.println("pageRequest--rows:"+pageRequest.getRows());
@@ -39,25 +40,25 @@ public class SeedController {
 											pageRequest.getRows(), 
 											new Sort(order));
 		// retrieve the result
-		return seedService.findAll(pageable);
+		return growStageService.findAll(pageable);
 	}
 	
 	@ResponseBody
 	@RequestMapping("/save")
-	public Message save(Seed seed) {
-		return seedService.save(seed);
+	public Message save(GrowStage growStage) {
+		return growStageService.save(growStage);
 	}
 	
 	@ResponseBody
 	@RequestMapping("/delete")
-	public Message delete(Seed seed) {
-		return seedService.delete(seed);
+	public Message delete(GrowStage growStage) {
+		return growStageService.delete(growStage);
 	}
 	
 	@ResponseBody
 	@RequestMapping("/update")
-	public Message update(Seed seed) {
-		return seedService.update(seed);
+	public Message update(GrowStage growStage) {
+		return growStageService.update(growStage);
 	}
 	
 }

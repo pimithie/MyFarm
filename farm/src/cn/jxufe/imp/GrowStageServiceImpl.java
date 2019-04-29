@@ -7,20 +7,20 @@ import org.springframework.stereotype.Service;
 
 import cn.jxufe.bean.EasyUIData;
 import cn.jxufe.bean.Message;
-import cn.jxufe.dao.SeedDao;
-import cn.jxufe.entity.Seed;
-import cn.jxufe.service.SeedService;
+import cn.jxufe.dao.GrowStageDao;
+import cn.jxufe.entity.GrowStage;
+import cn.jxufe.service.GrowStageService;
 
 @Service
-public class SeedServiceImpl implements SeedService {
+public class GrowStageServiceImpl implements GrowStageService {
 
 	@Autowired
-	private SeedDao seedDao;
+	private GrowStageDao growStageDao;
 	
 	@Override
-	public EasyUIData<Seed> findAll(Pageable pageable) {
-		EasyUIData<Seed> result = new EasyUIData<>();
-		Page<Seed> page = seedDao.findAll(pageable);
+	public EasyUIData<GrowStage> findAll(Pageable pageable) {
+		EasyUIData<GrowStage> result = new EasyUIData<>();
+		Page<GrowStage> page = growStageDao.findAll(pageable);
 		System.out.println("page--Number:"+page.getNumber());
 		System.out.println("page--NumberOfElements:"+page.getNumberOfElements());
 		System.out.println("page--Size:"+page.getSize());
@@ -33,19 +33,19 @@ public class SeedServiceImpl implements SeedService {
 	}
 
 	@Override
-	public Message save(Seed seed) {
-		Seed newSeed = seedDao.save(seed);
+	public Message save(GrowStage growStage) {
+		GrowStage newGrowStage = growStageDao.save(growStage);
 		Message message = new Message();
 		// 200-->ok   400-->false
-		message.setCode(newSeed == null?400:200);
-		String msg = (newSeed == null) ? "增加失败":"增加成功";
+		message.setCode(newGrowStage == null?400:200);
+		String msg = (newGrowStage == null) ? "增加失败":"增加成功";
 		message.setMsg(msg);
 		return message;
 	}
 
 	@Override
-	public Message delete(Seed seed) {
-		seedDao.delete(seed);
+	public Message delete(GrowStage growStage) {
+		growStageDao.delete(growStage);
 		Message message = new Message();
 		message.setCode(200);
 		message.setMsg("删除成功");
@@ -53,8 +53,8 @@ public class SeedServiceImpl implements SeedService {
 	}
 
 	@Override
-	public Message update(Seed seed) {
-		seedDao.save(seed);
+	public Message update(GrowStage growStage) {
+		growStageDao.save(growStage);
 		Message message = new Message();
 		message.setCode(200);
 		message.setMsg("更新成功");

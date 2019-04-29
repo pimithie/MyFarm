@@ -1,21 +1,21 @@
 package cn.jxufe.bean;
 
 public class EasyUIDataPageRequest {
-	private int currentPage = 1;
-	private int pageSize = 1;
+	private int page = 1;
+	private int rows = 1;
 	private String sort = "id";
 	private String order ="asc";
-	public int getCurrentPage() {
-		return currentPage;
+	public int getPage() {
+		return page;
 	}
-	public void setCurrentPage(int currentPage) {
-		this.currentPage = currentPage;
+	public void setPage(int page) {
+		this.page = page;
 	}
-	public int getPageSize() {
-		return pageSize;
+	public int getRows() {
+		return rows;
 	}
-	public void setPageSize(int pageSize) {
-		this.pageSize = pageSize;
+	public void setRows(int rows) {
+		this.rows = rows;
 	}
 	public String getSort() {
 		return sort;
