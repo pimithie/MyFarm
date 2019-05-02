@@ -25,7 +25,7 @@ public class SeedController {
 	
 	@ResponseBody
 	@RequestMapping("/find")
-	public EasyUIData<Seed> getPageData(@RequestBody EasyUIDataPageRequest pageRequest){
+	public EasyUIData<Seed> getPageData(EasyUIDataPageRequest pageRequest){
 		// log
 		System.out.println("pageRequest--page:"+pageRequest.getPage());
 		System.out.println("pageRequest--rows:"+pageRequest.getRows());
@@ -58,6 +58,11 @@ public class SeedController {
 	@RequestMapping("/update")
 	public Message update(Seed seed) {
 		return seedService.update(seed);
+	}
+	
+	@RequestMapping("/grid")
+	public String dataGridPage() {
+		return "seed/grid";
 	}
 	
 }

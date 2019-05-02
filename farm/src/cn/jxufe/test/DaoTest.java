@@ -41,9 +41,9 @@ public class DaoTest {
 //		}
 		
 		// test update
-		User user = userDao.findOne(1L);
-		user.setVipLevel(100);
-		userDao.save(user);
+//		User user = userDao.findOne(1L);
+//		user.setVipLevel(100);
+//		userDao.save(user);
 		
 		// test find
 //		User user = userDao.findOne(2L);

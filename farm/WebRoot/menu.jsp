@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -28,7 +32,7 @@
 </head>
 <body class="bar">
 	<div align="right" width="100%">
-		<a href="seed/grid" target="workspace"><img class="menu shadow" src="images/seedManager.png" width="50px"></a>
+		<a href="<%=basePath%>seed/grid" target="workspace"><img class="menu shadow" src="images/seedManager.png" width="50px"></a>
 	<div>
 </body>
 </html>
