@@ -28,11 +28,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         .menu{
            margin: 3px 5px 5px 5px;
         }
+        
+        .logo{
+        	position: relative;
+        	right: 10px;
+        }
     </style>
 </head>
 <body class="bar">
 	<div align="right" width="100%">
+		<a href="<%=basePath%>user/list" target="workspace"><img class="menu shadow" src="images/user.png" width="50px" height="50px"></a>
 		<a href="<%=basePath%>seed/grid" target="workspace"><img class="menu shadow" src="images/seedManager.png" width="50px"></a>
-	<div>
+	</div>
 </body>
 </html>

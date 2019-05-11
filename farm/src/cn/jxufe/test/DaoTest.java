@@ -27,18 +27,18 @@ public class DaoTest {
 	public void testUserDao() throws Exception {
 		
 		// test insert
-//		for (int i = 0;i<10;i++) {
-//			User user = new User();
-//			user.setCurrentLevel(20);
-//			user.setHeadPic("/a/b.jpg");
-//			user.setMoney(20000L);
-//			user.setPassword("123456");
-//			user.setUsername("下棋"+i);
-//			user.setPoint(1200);
-//			user.setUserExp(13000);
-//			user.setVipLevel(10);
-//			userDao.save(user);
-//		}
+		for (int i = 0;i<10;i++) {
+			User user = new User();
+			user.setCurrentLevel(20);
+			user.setHeadPic("/a/b.jpg");
+			user.setMoney(20000L);
+			user.setPassword("123456");
+			user.setUsername("下棋"+i);
+			user.setPoint(1200);
+			user.setUserExp(13000);
+			user.setVipLevel(10);
+			userDao.save(user);
+		}
 		
 		// test update
 //		User user = userDao.findOne(1L);
