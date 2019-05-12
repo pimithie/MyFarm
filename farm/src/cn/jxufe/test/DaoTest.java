@@ -30,7 +30,7 @@ public class DaoTest {
 		for (int i = 0;i<10;i++) {
 			User user = new User();
 			user.setCurrentLevel(20);
-			user.setHeadPic("/a/b.jpg");
+			user.setHeadPic("none.jpg");
 			user.setMoney(20000L);
 			user.setPassword("123456");
 			user.setUsername("下棋"+i);

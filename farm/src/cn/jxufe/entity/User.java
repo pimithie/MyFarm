@@ -7,6 +7,9 @@ import cn.jxufe.bean.EntityID;
 
 @Table(name="T_User")
 @Entity
+/**
+ * 用户实体
+ */
 public class User extends EntityID{
 	/**
 	 * 用户名
@@ -16,37 +19,37 @@ public class User extends EntityID{
 	/**
 	 * 密码
 	 */
-	private String password;
+	private String password = "123456";
 	
 	/**
 	 * 经验
 	 */
-	private long userExp;
+	private long userExp = 0L;
 	
 	/**
 	 * 金币
 	 */
-	private long money;
+	private long money = 100L;
 	
 	/**
 	 * 头像图片路径
 	 */
-	private String headPic;
+	private String headPic = "none.png";
 	
 	/**
 	 * 当前用户的等级
 	 */
-	private int currentLevel;
+	private int currentLevel = 0;
 	
 	/**
 	 * VIP等级
 	 */
-	private int vipLevel;
+	private int vipLevel = 0;
 	
 	/**
 	 * 积分
 	 */
-	private int point;
+	private int point = 0;
 
 	public String getUsername() {
 		return username;
@@ -111,7 +114,12 @@ public class User extends EntityID{
 	public void setPoint(int point) {
 		this.point = point;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "User [username=" + username + ", password=" + password + ", userExp=" + userExp + ", money=" + money
+				+ ", headPic=" + headPic + ", currentLevel=" + currentLevel + ", vipLevel=" + vipLevel + ", point="
+				+ point + "]";
+	}
 	
 }

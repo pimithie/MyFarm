@@ -1,5 +1,7 @@
 package cn.jxufe.imp;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +20,9 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserDao userDao;
 	
+	/**
+	 * 查询当前页的信息
+	 */
 	@Override
 	public EasyUIData<User> findAll(Pageable pageable) {
 		Page<User> findAll = userDao.findAll(pageable);
@@ -27,6 +32,9 @@ public class UserServiceImpl implements UserService {
 		return res;
 	}
 
+	/**
+	 * 新增一个用户
+	 */
 	@Override
 	public Message save(User t) {
 		User newSeed = userDao.save(t);
@@ -38,6 +46,9 @@ public class UserServiceImpl implements UserService {
 		return message; 
 	}
 
+	/**
+	 * 删除一个用户
+	 */
 	@Override
 	public Message delete(User t) {
 		userDao.delete(t);
@@ -47,6 +58,9 @@ public class UserServiceImpl implements UserService {
 		return message;
 	}
 
+	/**
+	 * 更新一个用户
+	 */
 	@Override
 	public Message update(User t) {
 		userDao.save(t);
@@ -54,6 +68,22 @@ public class UserServiceImpl implements UserService {
 		message.setCode(200);
 		message.setMsg("更新成功");
 		return message;
+	}
+
+	/**
+	 * 若有username条件,则根据username提交进行分页查询,否则
+	 * 进行全表分页查询
+	 * @param pageRequest Easy UI前台请求参数
+	 * @param username username条件,如果有的话
+	 * @return 结果集
+	 */
+	@Override
+	public EasyUIData<User> findByUsernameLike(Pageable pageable,String username) {
+		Page<User> users = userDao.findByUsernameLike(pageable,username);
+		EasyUIData<User> res = new EasyUIData<>();
+		res.setRows(users.getContent());
+		res.setTotal(users.getTotalElements());
+		return res;
 	}
 
 }
