@@ -36,9 +36,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </style>
 </head>
 <body class="bar">
-	<div align="right" width="100%">
+	<div width="100%">
+		<div style="float: left; margin-left: 5px;margin-top: 5px; width: 200px;">
+			<img id="headPic" src="images/upload/none.png" width="50px" height="50px" style="float: left;">
+			<span id="currentUsername" style="float: right; color: #d5d00f; margin-right: 20%">未知用户</span>
+			<br/>
+			<span id="userInfo" style="float: right;color: white;background-color: #3aace5;border: 1px solid #3aace5;border-radius: 12px;">
+				&nbsp;
+				<font id='userExp' style="font-size: 12px;" color="#48d2f5">经验:0</font>
+				<font id='userMoney' style="font-size: 12px;" color="#d3e998">金币:0</font>
+				<font id='userPoint' style="font-size: 12px;" color="#c87e86">积分:0</font>
+				&nbsp;
+			</span>
+		</div>
+		
+		<div style="float: right;">
+		<a href="<%=basePath%>login.jsp" target="workspace"><img class="menu shadow" src="images/login.png" width="50px" height="50px"></a>
 		<a href="<%=basePath%>user/list" target="workspace"><img class="menu shadow" src="images/user.png" width="50px" height="50px"></a>
 		<a href="<%=basePath%>seed/grid" target="workspace"><img class="menu shadow" src="images/seedManager.png" width="50px"></a>
+		</div>
 	</div>
 </body>
 </html>

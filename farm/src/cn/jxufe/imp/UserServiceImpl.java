@@ -1,5 +1,6 @@
 package cn.jxufe.imp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import cn.jxufe.dao.UserDao;
 import cn.jxufe.entity.Seed;
 import cn.jxufe.entity.User;
 import cn.jxufe.service.UserService;
+import cn.jxufe.vo.LoginInfo;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -84,6 +86,28 @@ public class UserServiceImpl implements UserService {
 		res.setRows(users.getContent());
 		res.setTotal(users.getTotalElements());
 		return res;
+	}
+
+	@Override
+	public List<LoginInfo> retrieveLoginInfo() {
+		List<User> resultList = userDao.findAll();
+		List<LoginInfo> res = new ArrayList<>();
+		for (User user : resultList) {
+			LoginInfo info = new LoginInfo();
+			info.setMonry(user.getMoney());
+			info.setPoint(user.getPoint());
+			info.setUserExp(user.getUserExp());
+			info.setUserId(user.getId());
+			info.setUsername(user.getUsername());
+			info.setHeadPic(user.getHeadPic());
+			res.add(info);
+		}
+		return res;
+	}
+
+	@Override
+	public User findUserById(long id) {
+		return userDao.findOne(id);
 	}
 
 }

@@ -2,8 +2,10 @@ package cn.jxufe.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -20,10 +22,12 @@ import org.springframework.web.multipart.MultipartFile;
 import cn.jxufe.bean.EasyUIData;
 import cn.jxufe.bean.EasyUIDataPageRequest;
 import cn.jxufe.bean.Message;
+import cn.jxufe.dao.UserDao;
 import cn.jxufe.entity.Seed;
 import cn.jxufe.entity.User;
 import cn.jxufe.service.SeedService;
 import cn.jxufe.service.UserService;
+import cn.jxufe.vo.LoginInfo;
 
 @Controller
 @RequestMapping("/user")
@@ -138,6 +142,32 @@ public class UserController {
 		mes.setCode(200);
 		mes.setMsg("上传成功!");
 		mes.setData(filename);
+		return mes;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/retrieveLoginInfo")
+	/**
+	 * 获得所有的用户信息
+	 */
+	public List<LoginInfo> retrieveLoginInfo () {
+		return userService.retrieveLoginInfo();
+	}
+	
+	@ResponseBody
+	@RequestMapping("/login")
+	/**
+	 * 进行用户登录，将User保存到session中
+	 */
+	public Message login (long userId,HttpServletRequest request) {
+		System.out.println("userId--->"+userId);
+		User user = userService.findUserById(userId);
+		HttpSession session = request.getSession();
+		session.setAttribute("currentUser", user);
+		Message mes = new Message();
+		mes.setCode(200);
+		mes.setMsg("登录成功!");
+		mes.setData(user);
 		return mes;
 	}
 	
