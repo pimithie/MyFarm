@@ -73,6 +73,16 @@ public class Seed extends EntityID {
 	 * 提示
 	 */
 	private String tips;
+	
+	private String seedImage;
+
+	public String getSeedImage() {
+		return seedImage;
+	}
+
+	public void setSeedImage(String seedImage) {
+		this.seedImage = seedImage;
+	}
 
 	public int getSeedId() {
 		return seedId;

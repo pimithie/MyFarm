@@ -23,9 +23,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         }
     </style>
 </head>
-<frameset rows="60,*,50" border="0">
+<frameset id="container" rows="60,*,50" border="0">
 	<frame src="menu.jsp" scrolling="no" name="menu" id="menu">
-	<frame name="workspace" src="welcome.jsp" scrolling="no" width="100%">
-	<frame src="tools.jsp" scrolling="no"> 		
+	<frame id="workspace" name="workspace" src="welcome.jsp" scrolling="no" width="100%">
+	<frame id="footer" name="footer" src="tools.jsp" scrolling="no"> 		
 </frameset>
 </html>

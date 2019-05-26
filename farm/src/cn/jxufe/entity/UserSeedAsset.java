@@ -8,26 +8,29 @@ import cn.jxufe.bean.EntityID;
 @Table(name="user_seed_asset")
 @Entity
 public class UserSeedAsset extends EntityID{
-
-	private int userId;
 	
-	private int seedId;
+	/**
+	 * 用户id
+	 */
+	private long userId;
+	
+	private long seedId;
 	
 	private int countOfSeed;
 
-	public int getUserId() {
+	public long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(int userId) {
+	public void setUserId(long userId) {
 		this.userId = userId;
 	}
 
-	public int getSeedId() {
+	public long getSeedId() {
 		return seedId;
 	}
 
-	public void setSeedId(int seedId) {
+	public void setSeedId(long seedId) {
 		this.seedId = seedId;
 	}
 

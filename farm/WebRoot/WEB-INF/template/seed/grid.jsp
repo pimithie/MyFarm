@@ -19,7 +19,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<script type="text/javascript" src="<%=basePath%>ext/easyui/jquery.min.js"></script>
 		<script type="text/javascript" src="<%=basePath%>ext/easyui/jquery.easyui.min.js"></script>
 		<script type="text/javascript" src="<%=basePath%>ext/easyui/plugins/jquery.edatagrid.js"></script>
-		<script type="text/javascript" src="<%=basePath%>ext/easyui/locale/easyui-lang-zh_CN1.js"></script>
+		<script type="text/javascript" src="<%=basePath%>ext/easyui/locale/easyui-lang-zh_CN.js"></script>
 		<script type="text/javascript" src="<%=basePath%>ext/farm/helper.js?346t"></script>
 	</head>
 

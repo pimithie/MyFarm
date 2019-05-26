@@ -7,5 +7,7 @@ import cn.jxufe.entity.UserSeedAsset;
 
 @Repository
 public interface UserSeedAssetDao extends JpaRepository<UserSeedAsset, Long>{
-
+	
+	public UserSeedAsset findByUserIdAndSeedId (long userId,long seedId);
+	
 }

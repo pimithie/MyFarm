@@ -171,4 +171,18 @@ public class UserController {
 		return mes;
 	}
 	
+	@ResponseBody
+	@RequestMapping("/getCurrentUser")
+	public Message getCurrentUser(HttpSession session) {
+		Message msg = new Message();
+		Object user;
+		if ((user = session.getAttribute("currentUser")) != null) {
+			msg.setCode(200);
+			msg.setData(user);
+		} else {
+			msg.setCode(400);
+		}
+		return msg;
+	}
+	
 }
