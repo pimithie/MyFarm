@@ -1,12 +1,15 @@
 package cn.jxufe.service;
 
-import org.springframework.data.domain.Pageable;
+import java.util.List;
 
-import cn.jxufe.bean.EasyUIData;
 import cn.jxufe.bean.Message;
 import cn.jxufe.entity.GrowStage;
-import cn.jxufe.entity.Seed;
 
 public interface GrowStageService extends BasicCRUD<GrowStage>{
 	
+	public Message findAll();
+	
+	public List<GrowStage> getGrowthData(int seedId);
+	
+	public Message getNextImage(Integer seedId);
 }

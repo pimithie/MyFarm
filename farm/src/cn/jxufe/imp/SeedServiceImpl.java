@@ -1,5 +1,7 @@
 package cn.jxufe.imp;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -59,6 +61,20 @@ public class SeedServiceImpl implements SeedService {
 		message.setCode(200);
 		message.setMsg("更新成功");
 		return message;
+	}
+
+	@Override
+	public Seed getSeedById(long id) {
+		return seedDao.findOne(id);
+	}
+
+	@Override
+	public EasyUIData<Seed> findBySeedNameLike(Pageable pageable, String seedName) {
+		Page<Seed> page = seedDao.findBySeedNameLike(pageable, "%"+seedName+"%");
+		EasyUIData<Seed> res = new EasyUIData<>();
+		res.setRows(page.getContent());
+		res.setTotal(page.getTotalElements());
+		return res;
 	}
 
 }

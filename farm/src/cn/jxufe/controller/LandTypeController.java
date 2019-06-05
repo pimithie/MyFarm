@@ -16,5 +16,9 @@ public class LandTypeController {
 	@Autowired
 	private LandTypeService landTypeService;
 
-	
+	@ResponseBody
+	@RequestMapping("/findAll")
+	public Message findAll() {
+		return landTypeService.findAll();
+	}
 }

@@ -41,6 +41,15 @@ public class LandTypeServiceImpl implements LandTypeService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Message findAll() {
+		Message msg = new Message();
+		msg.setData(landTypeDao.findAll());
+		msg.setCode(200);
+		msg.setMsg("查询成功");
+		return msg;
+	}
 	
 
 }

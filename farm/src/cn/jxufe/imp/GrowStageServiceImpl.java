@@ -1,5 +1,7 @@
 package cn.jxufe.imp;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -59,6 +61,43 @@ public class GrowStageServiceImpl implements GrowStageService {
 		message.setCode(200);
 		message.setMsg("更新成功");
 		return message;
+	}
+
+	@Override
+	public Message findAll() {
+		Message msg = new Message();
+		List<GrowStage> list = growStageDao.findAll();
+		msg.setData(list);
+		msg.setCode(200);
+		msg.setMsg("查询成功");
+		return msg;
+	}
+
+	@Override
+	public List<GrowStage> getGrowthData(int seedId) {
+		return growStageDao.findBySeedId(seedId);
+	}
+
+	@Override
+	public Message getNextImage(Integer seedId) {
+		List<GrowStage> list = growStageDao.findBySeedId(seedId);
+		int nextImage = Integer.MIN_VALUE;
+		if (null == list || 0 == list.size()) {
+			nextImage = 0;
+		} else {
+			for (GrowStage gs : list) {
+				int tmp;
+				nextImage = ((tmp = gs.getGrowStageId()) > nextImage)?tmp:nextImage;
+			}
+		}
+		nextImage++;
+		Message msg = new Message();
+		msg.setCode(200);
+		msg.setData(nextImage);
+		msg.setMsg("查询成功");
+		System.out.println("nextImage----->"+nextImage);
+		System.out.println("seedId----->"+seedId);
+		return msg;
 	}
 
 }

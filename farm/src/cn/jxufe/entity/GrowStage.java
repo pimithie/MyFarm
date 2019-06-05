@@ -17,7 +17,7 @@ public class GrowStage extends EntityID{
 
 	private int stageNeedTime;
 
-	private float InsectProbability;
+	private float insectProbability;
 
 	private int picWidth;
 	
@@ -62,11 +62,11 @@ public class GrowStage extends EntityID{
 	}
 
 	public float getInsectProbability() {
-		return InsectProbability;
+		return insectProbability;
 	}
 
 	public void setInsectProbability(float insectProbability) {
-		InsectProbability = insectProbability;
+		this.insectProbability = insectProbability;
 	}
 
 	public int getPicWidth() {

@@ -1,5 +1,7 @@
 package cn.jxufe.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +16,8 @@ import cn.jxufe.bean.EasyUIData;
 import cn.jxufe.bean.EasyUIDataPageRequest;
 import cn.jxufe.bean.Message;
 import cn.jxufe.entity.GrowStage;
+import cn.jxufe.entity.GrowStageCategoryFactory;
+import cn.jxufe.entity.GrowStageCategoryFactory.GrowStageCategory;
 import cn.jxufe.service.GrowStageService;
 
 @Controller
@@ -22,6 +26,29 @@ public class GrowStageController {
 
 	@Autowired
 	private GrowStageService growStageService;
+	
+	@ResponseBody
+	@RequestMapping("/findAll")
+	public Message findAll() {
+		Message msg = new Message();
+		msg.setData(GrowStageCategoryFactory.getAllGrowStageCategory());
+		msg.setCode(200);
+		msg.setMsg("查询成功");
+		return msg;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/growthData")
+	public List<GrowStage> getGrowthData(int seedId) {
+		return growStageService.getGrowthData(seedId);
+	}
+	
+	@ResponseBody
+	@RequestMapping("/getNextImage")
+	public Message getNextImage(Integer seedId) {
+		return growStageService.getNextImage(seedId);
+	}
+	
 	
 	
 	@ResponseBody

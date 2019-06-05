@@ -25,7 +25,7 @@ public class SeedController {
 	
 	@ResponseBody
 	@RequestMapping("/find")
-	public EasyUIData<Seed> getPageData(EasyUIDataPageRequest pageRequest){
+	public EasyUIData<Seed> getPageData(EasyUIDataPageRequest pageRequest,String seedName){
 		// log
 		System.out.println("pageRequest--page:"+pageRequest.getPage());
 		System.out.println("pageRequest--rows:"+pageRequest.getRows());
@@ -39,7 +39,10 @@ public class SeedController {
 											pageRequest.getRows(), 
 											new Sort(order));
 		// retrieve the result
-		return seedService.findAll(pageable);
+		if (null == seedName || "".equals(seedName)) {
+			return seedService.findAll(pageable);
+		}
+		return seedService.findBySeedNameLike(pageable, seedName);
 	}
 	
 	@ResponseBody
@@ -57,6 +60,8 @@ public class SeedController {
 	@ResponseBody
 	@RequestMapping("/update")
 	public Message update(Seed seed) {
+		Seed preSeed = seedService.getSeedById(seed.getId());
+		seed.setSeedImage(preSeed.getSeedImage());
 		return seedService.update(seed);
 	}
 	
