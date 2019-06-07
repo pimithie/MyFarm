@@ -14,7 +14,6 @@ public class SeedAsset extends EntityID{
 	
 	private long userId;
 	
-	@Id
 	private long seedId;
 	
 	private String seedName;

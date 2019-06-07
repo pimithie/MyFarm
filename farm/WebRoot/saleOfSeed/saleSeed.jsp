@@ -19,6 +19,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<script type="text/javascript" src="<%=basePath%>ext/easyui/plugins/jquery.edatagrid.js"></script>
 		<script type="text/javascript" src="<%=basePath%>ext/easyui/locale/easyui-lang-zh_CN.js"></script>
 		<script type="text/javascript" src="<%=basePath%>ext/farm/helper.js?346t"></script>
+		<script type="text/javascript" src="<%=basePath%>ext/my/my.js"></script>
 	<style type="text/css">
 		.seedInfoContainer {
 			background-image: url(<%=basePath%>images/border.gif);
@@ -91,6 +92,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            	parent.$("#container").attr("rows",'60,*,158');
         });
 		
+		function checkLogin() {
+			$.ajax({
+				type : 'post',
+				url : '<%=basePath%>user/getCurrentUser',
+				async : false,
+				success : function(data) {
+					if (data.code == 400) {
+						$.messager.alert({
+							title : '服务器消息',
+							msg : '请先进行登录!',
+							fn : function() {
+								parent.$("#workspace").attr("src",
+										'<%=basePath%>login.jsp');
+							}
+						});
+					}
+				}
+			});
+		}
+		
+		window.onunload = function () {
+			parent.$("#footer").attr("src",'<%=basePath%>tools.jsp');
+			parent.$("#container").attr("rows",'60,*,50');
+		};
+		
 		function doBuy(rowdata) {
 			$.messager.confirm("操作提示", "您确定要购买"+rowdata.seedName+"的种子吗？", function (isTrue) {
 					if(isTrue) {
@@ -134,27 +160,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						infoContainer.append(container);
 					}
 					
-				}
-			});
-		}
-		
-		function checkLogin() {
-			$.ajax({
-				type: 'post',
-				url: '<%=basePath%>user/getCurrentUser',
-				async: false,
-				success: function (data) {
-					if (data.code == 400) {
-						$.messager.alert({
-			                  title : '服务器消息',
-			                  msg : '请先进行登录!',
-			                  fn: function () {
-			                	  parent.$("#workspace").attr("src",'<%=basePath%>login.jsp');
-			                	  parent.$("#footer").attr("src",'<%=basePath%>tools.jsp');
-			                	  parent.$("#container").attr("rows",'60,*,50');
-							  }
-			            });
-					}
 				}
 			});
 		}

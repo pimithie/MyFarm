@@ -51,6 +51,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
 		
 		<div style="float: right;">
+		<a href="<%=basePath%>main.jsp" target="workspace"><img class="menu shadow" src="images/farmButton.png" width="50px" height="50px"></a>
 		<a href="<%=basePath%>saleOfSeed/saleSeed.jsp" target="workspace"><img class="menu shadow" src="images/packet.png" width="50px" height="50px"></a>
 		<a href="<%=basePath%>login.jsp" target="workspace"><img class="menu shadow" src="images/login.png" width="50px" height="50px"></a>
 		<a href="<%=basePath%>user/list" target="workspace"><img class="menu shadow" src="images/user.png" width="50px" height="50px"></a>

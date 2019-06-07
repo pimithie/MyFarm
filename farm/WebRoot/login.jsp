@@ -28,7 +28,7 @@
 	 body{
             margin: 0px;
             background-image:url(<%=basePath%>images/background.png);
-            background-size:100% 100%;
+            background-size:100% 75%;
             background-repeat:no-repeat;
             background-color: transparent;
 			border:none;
