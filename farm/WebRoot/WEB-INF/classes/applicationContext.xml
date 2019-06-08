@@ -120,6 +120,11 @@
 		<property name="entityManagerFactory"
 			ref="entityManagerFactory" />
 	</bean>
+	
+	<!-- transaction template -->
+	<bean name="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+		<property name="transactionManager" ref="transactionManager"></property>
+	</bean>
 
 	<!-- 使用annotation定义事务 -->
 	<tx:annotation-driven

@@ -12,4 +12,5 @@ public interface GrowStageDao extends JpaRepository<GrowStage, Long>{
 	
 	public List<GrowStage> findBySeedId(int seedId);
 	
+	public GrowStage findBySeedIdAndGrowStageId (int seedId,int growStageId);
 }

@@ -60,70 +60,70 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 		background-size: 150px 75px;
 		position: absolute;
 	}
-	#land1 {
+	#land0 {
 		left: 560px;
 		top: 124px;
 	}
-	#land2 {
+	#land1 {
 		left: 459px;
 		top: 169px;
 	}
-	#land3 {
+	#land2 {
 		left: 361px;
 		top: 213px;
 	}
-	#land4 {
+	#land3 {
 		left: 264px;
 		top: 266px;
 	}
 	/*----------------*/
-	#land5 {
+	#land4 {
 		left: 682px;
 		top: 188px;
 	}
-	#land6 {
+	#land5 {
 		left: 585px;
 		top: 239px;
 	}
-	#land7 {
+	#land6 {
 		left: 493px;
 		top: 289px;
 	}
-	#land8 {
+	#land7 {
 		left: 401px;
 		top: 339px;
 	}
 	/*----------------*/
-	#land9 {
+	#land8 {
 		left: 821px;
 		top: 253px;
 	}
-	#land10 {
+	#land9 {
 		left: 714px;
 		top: 305px;
 	}
-	#land11 {
+	#land10 {
 		left: 613px;
 		top: 357px;
 	}
-	#land12 {
+	#land11 {
 		left: 516px;
 		top: 406px;
 	}
 	/*----------------*/
-	#land13 {
+	#land12 {
 		left: 972px;
 		top: 319px;
 	}
-	#land14 {
+	#land13 {
 		left: 869px;
 		top: 373px;
 	}
-	#land15 {
+	#land14 {
 		left: 771px;
 		top: 427px;
 	}
-	#land16 {
+	#land15 {
 		left: 660px;
 		top: 480px;
 	}
@@ -138,10 +138,19 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 		margin-left: 23px;
 		margin-right: 23px;
 	}
+	.seedImage:hover {
+		cursor: pointer;
+	}
+	.seed {
+		width: 48px;
+		height: 92px;
+		position: absolute;
+		left: 51px;
+		top: 8px;
+	}
 </style>
 </head>
 <body>
-	<button onclick="openOrCloseDialog()">show dialog</button>
 	    <div id="dd" class="easyui-dialog" title="My Dialog" style="width:600px;height:300px;"
         data-options="iconCls:'icon-save',resizable:true,closed:true">
         		<div class="page" style="float: left;">
@@ -177,32 +186,42 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
         			<img width="20px" height="20px" src="<%=basePath%>images/right.png">
         		</div>
     	</div>
-	<div id="land1" class="normal" >
+	<div id="land0" class="normal land">
+		
 	</div>
-	<div id="land2" class="normal" >
+	<div id="land1" class="normal land" >
 	</div>
-	<div id="land3" class="normal" >
+	<div id="land2" class="normal land" >
 	</div>
-	<div id="land4" class="normal" ></div>
+	<div id="land3" class="normal land" ></div>
 	<!-- easyui-draggable -------------- -->
-	<div id="land5" class="red" ></div>
-	<div id="land6" class="red" ></div>
-	<div id="land7" class="red" ></div>
-	<div id="land8" class="red" ></div>
+	<div id="land4" class="red land" ></div>
+	<div id="land5" class="red land" ></div>
+	<div id="land6" class="red land" ></div>
+	<div id="land7" class="red land" ></div>
 	<!-- easyui-draggable -------------- -->
-	<div id="land9" class="black" ></div>
-	<div id="land10" class="black" ></div>
-	<div id="land11" class="black" ></div>
-	<div id="land12" class="black" ></div>
+	<div id="land8" class="black land" ></div>
+	<div id="land9" class="black land" ></div>
+	<div id="land10" class="black land" ></div>
+	<div id="land11" class="black land" ></div>
 	<!-- easyui-draggable -------------- -->
-	<div id="land13" class="gold" ></div>
-	<div id="land14" class="gold" ></div>
-	<div id="land15" class="gold" ></div>
-	<div id="land16" class="gold" ></div>
+	<div id="land12" class="gold land" ></div>
+	<div id="land13" class="gold land" ></div>
+	<div id="land14" class="gold land" ></div>
+	<div id="land15" class="gold land" ></div>
 </body>
 	<script type="text/javascript">
+		var landId,landType;
 		$(document).ready(function () {
 			checkLogin();
+			$(".land").click(function (e) {
+				landId = $(e.target).attr("id").substring(4);
+				var className = $(e.target).attr("class");
+				landType = className.split(" ")[0];
+				alert(landType);
+				$("#allSeeds").html("");
+				$("#dd").dialog("open");
+			});
 			// initialize websocket connection
 			initWebSocket();
 			parent.$("#container").attr("rows",'60,*');
@@ -240,7 +259,7 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 		}
 	    
 	    function onMessage(evt) {
-	    	alert(evt.data);
+	    	alert("收到服务器websocket消息！");
 	    	console.log("onMessage--->"+evt);
 		}
 	    function onError(evt) {
@@ -279,8 +298,36 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 	    					$(span).html(data.rows[i].countOfSeed);
 	    					p.append(span);
 	    					var url = "<%=basePath%>/images/crops/"+data.rows[i].seedImage;
-	    					$(img).css("width","70px").css("height","70px").attr("src",url);
-    						$(contentDiv).append(p).append(img);
+	    					$(img).css("width","70px").css("height","70px").attr("src",url).attr("seedId",data.rows[i].seedId);
+	    					$(img).addClass("seedImage");
+	    					$(img).click(function (e) {
+	    						var seedId = $(e.target).attr("seedId");
+	    						var plantInfo = {seedId:seedId,landId:landId,landType:landType};
+								$.ajax({
+									type : 'post',
+									url : '<%=basePath%>userLand/plant',
+									data: JSON.stringify(plantInfo),
+									dataType: 'json',
+									contentType: 'application/json;charset=UTF-8',
+									async : true,
+									success : function(res) {
+										console.log(res);
+										$.messager.show({
+						                	title : '服务器消息',
+						                	msg : res.msg
+						                });
+										<%-- <img src=""> --%>
+										if (res.code == 200) {
+											var seedStage = $("<img/>");
+											$(seedStage).addClass("seed");
+											$(seedStage).attr("src","<%=basePath%>images/crops/basic/0.png");
+											$("#land"+res.data.landId).append(seedStage);
+										}
+										$("#dd").dialog("close");
+									}
+								});
+							});
+	    					$(contentDiv).append(p).append(img);
     						$("#allSeeds").append(contentDiv);
     					}
 					}
@@ -307,18 +354,6 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 					}
 				}
 			});
-		}
-		
-		var isOpen = false;
-		
-		function openOrCloseDialog() {
-			if (isOpen) {
-				$("#dd").dialog("close");
-				isOpen = false;
-			} else {
-				$("#dd").dialog("open");
-				isOpen = true;
-			}
 		}
 	</script>
 </html>

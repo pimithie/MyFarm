@@ -100,4 +100,9 @@ public class GrowStageServiceImpl implements GrowStageService {
 		return msg;
 	}
 
+	@Override
+	public GrowStage findBySeedIdAndGrowStageId(int seedId, int growStageId) {
+		return growStageDao.findBySeedIdAndGrowStageId(seedId, growStageId);
+	}
+
 }

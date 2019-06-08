@@ -12,4 +12,6 @@ public interface GrowStageService extends BasicCRUD<GrowStage>{
 	public List<GrowStage> getGrowthData(int seedId);
 	
 	public Message getNextImage(Integer seedId);
+	
+	public GrowStage findBySeedIdAndGrowStageId (int seedId,int growStageId);
 }

@@ -14,14 +14,19 @@ public class UserLandState extends EntityID {
 	private int userId;
 	
 	/**
+	 * 种子Id，获取对应的土地类型等信息
+	 */
+	private int seedId;
+	
+	/**
 	 * 土地Id，获取对应的土地类型等信息
 	 */
 	private int landId;
 	
 	/**
-	 * 当前土地所种作物的Id，（seed id）
+	 * 成长阶段Id
 	 */
-	private int currentCropId;
+	private int growStageId;
 	
 	/**
 	 * 当前土地是否有害虫
@@ -29,63 +34,56 @@ public class UserLandState extends EntityID {
 	private boolean hasInsect;
 	
 	/**
-	 * 当前作物所处成长阶段的Id
+	 * 预期果实数
 	 */
-	private int currentGrowStageId;
-	
-	/*------用于在用户离线后进行对应的时间处理--------------*/
-	/**
-	 * 从当前阶段到下一阶段所需的时间
-	 */
-	private long nextStageNeedTime;
-	
-	/**
-	 * 用户关闭浏览器的时间
-	 */
-	private long closeBrowerTime;
+	private int fruitNum;
+
 	public int getUserId() {
 		return userId;
 	}
+
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
+
+	public int getSeedId() {
+		return seedId;
+	}
+
+	public void setSeedId(int seedId) {
+		this.seedId = seedId;
+	}
+
 	public int getLandId() {
 		return landId;
 	}
+
 	public void setLandId(int landId) {
 		this.landId = landId;
 	}
-	public int getCurrentCropId() {
-		return currentCropId;
+
+	public int getGrowStageId() {
+		return growStageId;
 	}
-	public void setCurrentCropId(int currentCropId) {
-		this.currentCropId = currentCropId;
+
+	public void setGrowStageId(int growStageId) {
+		this.growStageId = growStageId;
 	}
+
 	public boolean isHasInsect() {
 		return hasInsect;
 	}
+
 	public void setHasInsect(boolean hasInsect) {
 		this.hasInsect = hasInsect;
 	}
-	public int getCurrentGrowStageId() {
-		return currentGrowStageId;
-	}
-	public void setCurrentGrowStageId(int currentGrowStageId) {
-		this.currentGrowStageId = currentGrowStageId;
-	}
-	public long getNextStageNeedTime() {
-		return nextStageNeedTime;
-	}
-	public void setNextStageNeedTime(long nextStageNeedTime) {
-		this.nextStageNeedTime = nextStageNeedTime;
-	}
-	public long getCloseBrowerTime() {
-		return closeBrowerTime;
-	}
-	public void setCloseBrowerTime(long closeBrowerTime) {
-		this.closeBrowerTime = closeBrowerTime;
-	}
-	
-	
 
+	public int getFruitNum() {
+		return fruitNum;
+	}
+
+	public void setFruitNum(int fruitNum) {
+		this.fruitNum = fruitNum;
+	}
+	
 }
