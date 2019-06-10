@@ -1,20 +1,36 @@
 package cn.jxufe.imp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import cn.jxufe.bean.EasyUIData;
 import cn.jxufe.bean.Message;
+import cn.jxufe.dao.GrowStageDao;
+import cn.jxufe.dao.SeedDao;
 import cn.jxufe.dao.UserLandStateDao;
 import cn.jxufe.entity.UserLandState;
 import cn.jxufe.service.UserLandStateService;
+import cn.jxufe.vo.InitLandStateBean;
+import cn.jxufe.webSocketHandler.LandWebSocketHandler;
 
 @Service
 public class UserLandStateServiceImpl implements UserLandStateService {
 
 	@Autowired
-	private UserLandStateDao dao;
+	private UserLandStateDao userLandStateDao;
+	
+	@Autowired
+	private GrowStageDao growStageDao;
+	
+	@Autowired
+	private SeedDao seedDao;
+	
+	@Autowired
+	private LandWebSocketHandler landWebSocketHandler;
 	
 	@Override
 	public EasyUIData<UserLandState> findAll(Pageable pageable) {
@@ -23,13 +39,13 @@ public class UserLandStateServiceImpl implements UserLandStateService {
 
 	@Override
 	public Message save(UserLandState t) {
-		dao.save(t);
+		userLandStateDao.save(t);
 		return null;
 	}
 
 	@Override
 	public Message delete(UserLandState t) {
-		dao.delete(t);
+		userLandStateDao.delete(t);
 		return null;
 	}
 
@@ -40,7 +56,28 @@ public class UserLandStateServiceImpl implements UserLandStateService {
 
 	@Override
 	public UserLandState findByUserIdAndLandId(int userId, int landId) {
-		return dao.findByUserIdAndLandId(userId, landId);
+		return userLandStateDao.findByUserIdAndLandId(userId, landId);
+	}
+
+	@Override
+	public Message findByUserId(int userId) {
+		List<UserLandState> list = userLandStateDao.findByUserId(userId);
+		List<InitLandStateBean> res = new ArrayList<>();
+		for (UserLandState landState : list) {
+			InitLandStateBean bean = new InitLandStateBean();
+			bean.setFruitNum(landState.getFruitNum());
+			bean.setHasInsect(landState.isHasInsect());
+			bean.setGrowStage(growStageDao.findOne((long)landState.getGrowStageId()));
+			bean.setLandId(landState.getLandId());
+			bean.setSeed(seedDao.findOne((long)landState.getSeedId()));
+			bean.setMatureTime(landWebSocketHandler.getMatureTime(userId, landState.getLandId()));
+			res.add(bean);
+		}
+		Message msg = new Message();
+		msg.setCode(200);
+		msg.setMsg("query success!");
+		msg.setData(res);
+		return msg;
 	}
 
 }

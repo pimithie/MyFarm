@@ -79,6 +79,10 @@ public class LandWebSocketHandler extends TextWebSocketHandler{
 		log.info("user:"+user.getUsername()+" Error!");
 	}
 	
+	public String getMatureTime(int userId,int landId) {
+		return tasks.get(new UserIdAndLandId(userId, landId)).matureTime;
+	}
+	
 	public void plant (Seed seed,int userId,int landId,String matureTime) {
 		Timer timer = new Timer(true);
 		LandMonitorTask task = new LandMonitorTask(seed, landId, userId,matureTime);

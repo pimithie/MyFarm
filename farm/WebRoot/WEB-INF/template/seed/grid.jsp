@@ -526,7 +526,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             //	当点击成长阶段按钮时触发这个函数，生成成长阶段表
 			function growth(){
 			    var obj = event.srcElement ? event.srcElement : event.target; 
-			    id=$(obj).parent().parent().parent().children("td").eq(1).children("div").html()
+			    id=$(obj).parent().parent().parent().children("td").eq(1).children("div").html();
 		    	
 		    	$('#controlBox1').dialog('open').dialog('setTitle', '编辑成长阶段');
 		    	

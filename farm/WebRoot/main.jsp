@@ -20,7 +20,6 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 		<script type="text/javascript" src="<%=basePath%>ext/easyui/plugins/jquery.edatagrid.js"></script>
 		<script type="text/javascript" src="<%=basePath%>ext/easyui/locale/easyui-lang-zh_CN.js"></script>
 		<script type="text/javascript" src="<%=basePath%>ext/farm/helper.js?346t"></script>
-		<script type="text/javascript" src="<%=basePath%>ext/my/my.js"></script>
 <title>Insert title here</title>
 <style type="text/css">
 	body{
@@ -255,20 +254,135 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 		$(document).ready(function () {
 			checkLogin();
 			$(".land").click(function (e) {
-				landId = $(e.target).attr("id").substring(4);
-				if (landId == "rop") {
-					return;
+				if (e.target.localName == "div") {
+					landId = $(e.target).attr("id").substring(4);
+					var className = $(e.target).attr("class");
+					landType = className.split(" ")[0];
+					$("#allSeeds").html("");
+					$("#openBag")[0].play();
+					$("#dd").dialog("open");
 				}
-				var className = $(e.target).attr("class");
-				landType = className.split(" ")[0];
-				$("#allSeeds").html("");
-				$("#openBag")[0].play();
-				$("#dd").dialog("open");
 			});
 			// initialize websocket connection
 			initWebSocket();
 			parent.$("#container").attr("rows",'60,*');
+			// init current user land state
+			initLandState();
 		});
+		
+		function initLandState() {
+			$.ajax({
+				type : 'post',
+				url : '<%=basePath%>userLand/init',
+				dataType: 'json',
+				async : true,
+				success : function(res) {
+					for (var i = 0;i<res.data.length;i++) {
+						// seed
+						if (res.data[i].growStage.growStageId == 0) {
+							var seedStage = $("<img/>");
+							$(seedStage).addClass("seed").addClass("growing");
+							$(seedStage).attr("src","<%=basePath%>images/crops/basic/0.png");
+							var tooltip = "种子名称："+res.data[i].seed.seedName+"\n";
+							tooltip = tooltip+"当前阶段：成长阶段\n"+"预期成熟时间："+res.data[i].matureTime+"\n"+"预计收获果实数："+res.data[i].harvestNum+"个";
+							$(seedStage).attr("title",tooltip);
+							$("#land"+res.data[i].landId).append(seedStage);
+							continue;
+						}
+						// end
+						if (res.data[i].growStageId == 6) {
+							var endImg = $("<img />");
+							$(endImg).addClass("cleanUp");
+							$(endImg).attr("src","<%=basePath%>images/crops/basic/9.png").addClass("end");
+							var cleanUpInfo = {landId:res.data[i].landId};
+							$(endImg).click(function () {
+								$.ajax({
+									type : 'post',
+									url : '<%=basePath%>userLand/cleanUp',
+									data: cleanUpInfo,
+									dataType: 'json',
+									async : true,
+									success : function(res) {
+										$.messager.show({
+						                	title : '服务器消息',
+						                	msg : res.msg
+						                });
+										$(window.parent.frames["menu"].document).find('#userExp').html("经验:"+res.data.userExp);
+										$(window.parent.frames["menu"].document).find('#userMoney').html("金币:"+res.data.money);
+										$(window.parent.frames["menu"].document).find('#userPoint').html("积分:"+res.data.point);
+										$("#cleanUp")[0].play();
+									}
+								});
+							});
+							$("#land"+res.data[i].landId).append(endImg);
+							continue;
+						}
+						//--------------------
+						var imgUrl = "<%=basePath%>images/crops/"+data.data[i].seed.seedId+"/"+data.data[i].growStage.growStageId+".png";
+				    	var image = $("<img />")
+				    	var className = "crop"+res.data[i].seed.seedId+"_"+res.data[i].growStage.growStageId;
+				    	$(image).attr("id","theCrop");
+				    	$(image).attr("src",imgUrl).addClass(className).addClass("growing");
+				    	var tooltip = "种子名称："+res.data[i].seed.seedName+"\n";
+						tooltip = tooltip+"当前阶段："+res.data[i].growStage.cropStage+"\n"+"预期成熟时间："+res.data[i].matureTime+"\n"+"预计收获果实数："+res.data[i].harvestNum+"个";
+						$(image).attr("title",tooltip);
+						if (res.data[i].growStage.growStageId == 5) {
+							$(image).removeClass("growing").addClass("harvest");
+							$(image).click(function () {
+								var harvestInfo = {landId:res.data[i].landId};
+								$.ajax({
+									type : 'post',
+									url : '<%=basePath%>userLand/harvest',
+									data: harvestInfo,
+									dataType: 'json',
+									async : true,
+									success : function(res) {
+										$.messager.show({
+						                	title : '服务器消息',
+						                	msg : res.msg
+						                });
+										$(window.parent.frames["menu"].document).find('#userExp').html("经验:"+res.data.userExp);
+										$(window.parent.frames["menu"].document).find('#userMoney').html("金币:"+res.data.money);
+										$(window.parent.frames["menu"].document).find('#userPoint').html("积分:"+res.data.point);
+										$("#harvest")[0].play();
+									}
+								});
+							});
+						}
+						if (res.data[i].hasInsect) {
+							var insectImg = $("<img />");
+				    		$(insectImg).attr("src","<%=basePath%>images/Insect.png").addClass("insectImg");
+				    		$(insectImg).addClass("insect");
+				    		$(insectImg).click(function () {
+								var killInsectInfo = {landId:res.data[i].landId};
+								$.ajax({
+									type : 'post',
+									url : '<%=basePath%>userLand/killInsect',
+									data: killInsectInfo,
+									dataType: 'json',
+									async : true,
+									success : function(res) {
+										$.messager.show({
+						                	title : '服务器消息',
+						                	msg : res.msg
+						                });
+										$(window.parent.frames["menu"].document).find('#userExp').html("经验:"+res.data.userExp);
+										$(window.parent.frames["menu"].document).find('#userMoney').html("金币:"+res.data.money);
+										$(window.parent.frames["menu"].document).find('#userPoint').html("积分:"+res.data.point);
+										$(insectImg).remove();
+										$("#killInsect")[0].play();
+									}
+								});
+							});
+				    		$("#land"+res.data[i].landId).append(insectImg);
+				    		$("#land"+res.data[i].landId).append(image);
+				    		continue;
+						}
+						$("#land"+res.data[i].landId).append(image);
+					}
+				}
+			});
+		}
 		
 		var websocket = null; 
 	    function initWebSocket(){    	     
@@ -313,6 +427,9 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 			                	title : '服务器消息',
 			                	msg : res.msg
 			                });
+							$(window.parent.frames["menu"].document).find('#userExp').html("经验:"+res.data.userExp);
+							$(window.parent.frames["menu"].document).find('#userMoney').html("金币:"+res.data.money);
+							$(window.parent.frames["menu"].document).find('#userPoint').html("积分:"+res.data.point);
 							$("#cleanUp")[0].play();
 						}
 					});
@@ -356,6 +473,9 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 			                	title : '服务器消息',
 			                	msg : res.msg
 			                });
+							$(window.parent.frames["menu"].document).find('#userExp').html("经验:"+res.data.userExp);
+							$(window.parent.frames["menu"].document).find('#userMoney').html("金币:"+res.data.money);
+							$(window.parent.frames["menu"].document).find('#userPoint').html("积分:"+res.data.point);
 							$(insectImg).remove();
 							$("#killInsect")[0].play();
 						}
@@ -395,6 +515,9 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 			                	title : '服务器消息',
 			                	msg : res.msg
 			                });
+							$(window.parent.frames["menu"].document).find('#userExp').html("经验:"+res.data.userExp);
+							$(window.parent.frames["menu"].document).find('#userMoney').html("金币:"+res.data.money);
+							$(window.parent.frames["menu"].document).find('#userPoint').html("积分:"+res.data.point);
 							$("#harvest")[0].play();
 						}
 					});

@@ -7,6 +7,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="<%=basePath%>ext/easyui/jquery.min.js"></script>
 <title>菜单</title>
 <style>
         body {
@@ -37,15 +38,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 <body class="bar">
 	<div width="100%">
-		<div style="float: left; margin-left: 5px;margin-top: 5px; width: 200px;">
+		<div style="float: left; margin-left: 5px;margin-top: 5px; width: 400px;">
 			<img id="headPic" src="images/upload/none.png" width="50px" height="50px" style="float: left;">
-			<span id="currentUsername" style="float: right; color: #d5d00f; margin-right: 20%">未知用户</span>
+			<span id="currentUsername" style="float: left; color: #d5d00f; margin-left: 5%">未知用户</span>
 			<br/>
-			<span id="userInfo" style="float: right;color: white;background-color: #3aace5;border: 1px solid #3aace5;border-radius: 12px;">
+			<span id="userInfo" style="margin-right:135px;width:200px; float: right;color: white;background-color: #3aace5;border: 1px solid #3aace5;border-radius: 12px;">
 				&nbsp;
-				<font id='userExp' style="font-size: 12px;" color="#48d2f5">经验:0</font>
-				<font id='userMoney' style="font-size: 12px;" color="#d3e998">金币:0</font>
-				<font id='userPoint' style="font-size: 12px;" color="#c87e86">积分:0</font>
+				<span id='userExp' style="font-size: 12px;margin-left: 2px;color:#48d2f5;" >经验:0</span>
+				<span id='userMoney' style="font-size: 12px;margin-left: 2px;color:#d3e998;" >金币:0</span>
+				<span id='userPoint' style="font-size: 12px;margin-left: 2px;color:#c87e86;" >积分:0</span>
 				&nbsp;
 			</span>
 		</div>
@@ -59,4 +60,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
 	</div>
 </body>
+<script type="text/javascript">
+
+	$(document).ready(function () {
+		$.ajax({
+			url: '<%=basePath%>user/getCurrentUser',
+			dataType: 'json',
+			async: true,
+			type: 'post',
+			success: function (data) {
+				if (data.code == 200) {
+					$(window.parent.frames["menu"].document).find('#currentUsername').html(data.data.username);
+					$(window.parent.frames["menu"].document).find('#userExp').html("经验:"+data.data.userExp);
+					$(window.parent.frames["menu"].document).find('#userMoney').html("金币:"+data.data.money);
+					$(window.parent.frames["menu"].document).find('#userPoint').html("积分:"+data.data.point);
+					$(window.parent.frames["menu"].document).find('#headPic').attr("src",'<%=basePath%>images/upload/'+data.data.headPic);
+				}
+			}
+		});
+	});
+
+
+
+</script>
 </html>
