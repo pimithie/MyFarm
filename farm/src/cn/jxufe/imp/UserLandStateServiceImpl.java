@@ -29,6 +29,7 @@ public class UserLandStateServiceImpl implements UserLandStateService {
 
 	@Override
 	public Message delete(UserLandState t) {
+		dao.delete(t);
 		return null;
 	}
 

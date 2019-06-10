@@ -1,0 +1,39 @@
+.crop1_1 {
+	position: absolute;
+	left: 35px;
+	top: -28px;
+	height: 129px;
+	width: 93px;
+}
+
+.crop1_2 {
+	position: absolute;
+	left: 29px;
+	top: -48px;
+	width: 95px;
+	height: 135px;
+}
+
+.crop1_3 {
+	position: absolute;
+	left: 19px;
+	top: -48px;
+	height: 181px;
+	width: 109px;
+}
+
+.crop1_4 {
+	position: absolute;
+	left: 9px;
+	top: -76px;
+	height: 237px;
+	width: 123px;
+}
+
+.crop1_5 {
+	position: absolute;
+	left: 2px;
+	top: -82px;
+	height: 234px;
+	width: 135px;
+}

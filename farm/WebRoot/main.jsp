@@ -14,6 +14,7 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 		<link rel="stylesheet" type="text/css" href="<%=basePath%>ext/easyui/themes/color.css">
 		<link rel="stylesheet" type="text/css" href="<%=basePath%>ext/farm/farm.css">
 		<link rel="stylesheet" type="text/css" href="<%=basePath%>ext/farm/imgPosition.css">
+		<link rel="stylesheet" type="text/css" href="<%=basePath%>css/my.css">
 		<script type="text/javascript" src="<%=basePath%>ext/easyui/jquery.min.js"></script>
 		<script type="text/javascript" src="<%=basePath%>ext/easyui/jquery.easyui.min.js"></script>
 		<script type="text/javascript" src="<%=basePath%>ext/easyui/plugins/jquery.edatagrid.js"></script>
@@ -148,6 +149,37 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 		left: 51px;
 		top: 8px;
 	}
+	.end {
+		width: 81px;
+		height: 195px;
+		position: absolute;
+		left: 40px;
+		top: -20px;
+	}
+	.insectImg {
+		position: absolute;
+	    left: -17px;
+	    top: -15px;
+	    height: 67px;
+	    width: 90px;
+	}
+	
+	.empty{
+		cursor: url("<%=basePath%>cursor/moshubang.cur"),auto;
+	}
+	.growing {
+		cursor: url("<%=basePath%>cursor/naozhong.cur"),auto;
+	}
+	.harvest {
+		cursor: url("<%=basePath%>cursor/shoutao.cur"),auto;
+	}
+	.cleanUp {
+		cursor: url("<%=basePath%>cursor/chanzi.cur"),auto;
+	}
+	.insect {
+		cursor: url("<%=basePath%>cursor/shachognji.cur"),auto;
+	}
+	
 </style>
 </head>
 <body>
@@ -186,29 +218,37 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
         			<img width="20px" height="20px" src="<%=basePath%>images/right.png">
         		</div>
     	</div>
-	<div id="land0" class="normal land">
-		
+	<div id="land0" class="normal land empty">
+		<%-- <img src="<%=basePath%>images/crops/1/5.png" class="easyui-draggable easyui-resizable" style="border: 1px solid red;"> --%>
+		<%-- <img src="<%=basePath%>images/crops/1/1.png" class="crop1_1"> --%>
 	</div>
-	<div id="land1" class="normal land" >
+	<div id="land1" class="normal land empty" >
 	</div>
-	<div id="land2" class="normal land" >
+	<div id="land2" class="normal land empty" >
 	</div>
-	<div id="land3" class="normal land" ></div>
+	<div id="land3" class="normal land empty" ></div>
 	<!-- easyui-draggable -------------- -->
-	<div id="land4" class="red land" ></div>
-	<div id="land5" class="red land" ></div>
-	<div id="land6" class="red land" ></div>
-	<div id="land7" class="red land" ></div>
+	<div id="land4" class="red land empty" ></div>
+	<div id="land5" class="red land empty" ></div>
+	<div id="land6" class="red land empty" ></div>
+	<div id="land7" class="red land empty" ></div>
 	<!-- easyui-draggable -------------- -->
-	<div id="land8" class="black land" ></div>
-	<div id="land9" class="black land" ></div>
-	<div id="land10" class="black land" ></div>
-	<div id="land11" class="black land" ></div>
+	<div id="land8" class="black land empty" ></div>
+	<div id="land9" class="black land empty" ></div>
+	<div id="land10" class="black land empty" ></div>
+	<div id="land11" class="black land empty" ></div>
 	<!-- easyui-draggable -------------- -->
-	<div id="land12" class="gold land" ></div>
-	<div id="land13" class="gold land" ></div>
-	<div id="land14" class="gold land" ></div>
-	<div id="land15" class="gold land" ></div>
+	<div id="land12" class="gold land empty" ></div>
+	<div id="land13" class="gold land empty" ></div>
+	<div id="land14" class="gold land empty" ></div>
+	<div id="land15" class="gold land empty" ></div>
+	<audio id="openBag" src="<%=basePath%>mp3/openBag.mp3"></audio>
+	<audio id="cleanUp" src="<%=basePath%>mp3/cleanUp.mp3"></audio>
+	<audio id="harvest" src="<%=basePath%>mp3/harvest.mp3"></audio>
+	<audio id="Insect" src="<%=basePath%>mp3/Insect.mp3"></audio>
+	<audio id="killInsect" src="<%=basePath%>mp3/killInsect.mp3"></audio>
+	<audio id="negative" src="<%=basePath%>mp3/negative.mp3"></audio>
+	<audio id="plantCrop" src="<%=basePath%>mp3/plantCrop.mp3"></audio>
 </body>
 	<script type="text/javascript">
 		var landId,landType;
@@ -216,10 +256,13 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 			checkLogin();
 			$(".land").click(function (e) {
 				landId = $(e.target).attr("id").substring(4);
+				if (landId == "rop") {
+					return;
+				}
 				var className = $(e.target).attr("class");
 				landType = className.split(" ")[0];
-				alert(landType);
 				$("#allSeeds").html("");
+				$("#openBag")[0].play();
 				$("#dd").dialog("open");
 			});
 			// initialize websocket connection
@@ -248,20 +291,119 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 	    }
 	    
 	    function onOpen(evt) {
-	    	console.log("onOpen--->"+evt);
-	    	if (websocket.readyState == websocket.OPEN) {
-		    	var data = {"msg":"hello server!"};
-		    	websocket.send(JSON.stringify(data));
-		    	alert("send success!");
-	    	} else {
-	    		alert("send fail!");
-	    	}
 		}
 	    
 	    function onMessage(evt) {
-	    	alert("收到服务器websocket消息！");
-	    	console.log("onMessage--->"+evt);
+	    	var data = eval('(' + evt.data + ')');
+	    	// end 
+	    	if (data.code == 101) {
+				var endImg = $("<img />");
+				$(endImg).addClass("cleanUp");
+				$(endImg).attr("src","<%=basePath%>images/crops/basic/9.png").removeClass("harvest").addClass("end");
+				var cleanUpInfo = {landId:data.data};
+				$(endImg).click(function () {
+					$.ajax({
+						type : 'post',
+						url : '<%=basePath%>userLand/cleanUp',
+						data: cleanUpInfo,
+						dataType: 'json',
+						async : true,
+						success : function(res) {
+							$.messager.show({
+			                	title : '服务器消息',
+			                	msg : res.msg
+			                });
+							$("#cleanUp")[0].play();
+						}
+					});
+				});
+				$("#land"+data.data).html("");
+				$("#land"+data.data).append(endImg);
+				return;
+	    	}
+	    	// restart quarter
+	    	if (data.code == 102) {
+	    		var seedStage = $("<img/>");
+				$(seedStage).addClass("seed").removeClass("cleanUp").addClass("growing");
+				$(seedStage).attr("src","<%=basePath%>images/crops/basic/0.png");
+				var tooltip = "种子名称："+data.data[1].seedName+"\n";
+				tooltip = tooltip+"当前阶段：成长阶段\n"+"预期成熟时间："+data.data[2].matureTime+"\n"+"预计收获果实数："+data.data[1].harvestNum+"个";
+				$(seedStage).attr("title",tooltip);
+				$("#land"+data.data[0]).html("");
+				$("#land"+data.data[0]).append(seedStage);
+				return;
+	    	}
+	    	// resume to empty
+	    	if (data.code == 103) {
+	    		$("#land"+data.data).html("");
+	    		return;
+	    	}
+	    	// produce the insect
+	    	if (data.code == 104) {
+	    		var insectImg = $("<img />");
+	    		$(insectImg).attr("src","<%=basePath%>images/Insect.png").addClass("insectImg");
+	    		$(insectImg).addClass("insect");
+	    		$(insectImg).click(function () {
+					var killInsectInfo = {landId:data.data};
+					$.ajax({
+						type : 'post',
+						url : '<%=basePath%>userLand/killInsect',
+						data: killInsectInfo,
+						dataType: 'json',
+						async : true,
+						success : function(res) {
+							$.messager.show({
+			                	title : '服务器消息',
+			                	msg : res.msg
+			                });
+							$(insectImg).remove();
+							$("#killInsect")[0].play();
+						}
+					});
+				});
+	    		$("#Insect")[0].play();
+	    		$("#land"+data.data).append(insectImg);
+	    		return;
+	    	}
+	    	// update the infomation of the number of friuts
+	    	if (data.code == 105) {
+	    		var tooltip = "种子名称："+data.data[3].seedName+"\n";
+				tooltip = tooltip+"当前阶段："+data.data[4].cropStage+"\n"+"预期成熟时间："+data.data[2]+"\n"+"预计收获果实数："+data.data[0]+"个";
+				$("#land"+data.data[1]).find("#theCrop").attr("title",tooltip);
+	    		return;
+	    	}
+	    	var imgUrl = "<%=basePath%>images/crops/"+data.data[0].seedId+"/"+data.data[0].growStageId+".png";
+	    	var image = $("<img />")
+	    	var className = "crop"+data.data[0].seedId+"_"+data.data[0].growStageId;
+	    	$(image).attr("id","theCrop");
+	    	$(image).attr("src",imgUrl).addClass(className).addClass("growing");
+	    	var tooltip = "种子名称："+data.data[2].seedName+"\n";
+			tooltip = tooltip+"当前阶段："+data.data[0].cropStage+"\n"+"预期成熟时间："+data.data[3]+"\n"+"预计收获果实数："+data.data[4]+"个";
+			$(image).attr("title",tooltip);
+			if (data.data[0].growStageId == 5) {
+				$(image).removeClass("growing").addClass("harvest");
+				$(image).click(function () {
+					var harvestInfo = {landId:data.data[1]};
+					$.ajax({
+						type : 'post',
+						url : '<%=basePath%>userLand/harvest',
+						data: harvestInfo,
+						dataType: 'json',
+						async : true,
+						success : function(res) {
+							$.messager.show({
+			                	title : '服务器消息',
+			                	msg : res.msg
+			                });
+							$("#harvest")[0].play();
+						}
+					});
+				});
+			}
+	    	$("#land"+data.data[1]).html("");
+	    	$("#land"+data.data[1]).append(image);
 		}
+	    
 	    function onError(evt) {
 	    	console.log("onError--->"+evt);
 		}
@@ -287,7 +429,7 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 						</p>
     					<img  width="70px" height="70px" src="<%=basePath%>images/crops/1/5.png">
     					</div> --%>
-    					console.log(data);
+    					/* console.log(data); */
     					for (var i = 0;i < data.rows.length;i++) {
 	    					var contentDiv = $("<div></div>");
 	    					var p = $("<p></p>");
@@ -319,9 +461,15 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 										<%-- <img src=""> --%>
 										if (res.code == 200) {
 											var seedStage = $("<img/>");
-											$(seedStage).addClass("seed");
+											$(seedStage).addClass("seed").addClass("growing");
+											var tooltip = "种子名称："+res.data.seed.seedName+"\n";
+											tooltip = tooltip+"当前阶段：成长阶段\n"+"预期成熟时间："+res.data.matureTime+"\n"+"预计收获果实数："+res.data.seed.harvestNum+"个";
+											$(seedStage).attr("title",tooltip);
 											$(seedStage).attr("src","<%=basePath%>images/crops/basic/0.png");
+											$("#plantCrop")[0].play();
 											$("#land"+res.data.landId).append(seedStage);
+										} else {
+											$("#negative")[0].play();
 										}
 										$("#dd").dialog("close");
 									}

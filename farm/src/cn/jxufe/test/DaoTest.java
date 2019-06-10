@@ -9,14 +9,16 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import cn.jxufe.bean.Message;
 import cn.jxufe.dao.SeedDao;
 import cn.jxufe.dao.UserDao;
 import cn.jxufe.entity.Seed;
 import cn.jxufe.entity.User;
+import net.sf.json.JSONObject;
 
-@WebAppConfiguration
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:applicationContext.xml")
+//@WebAppConfiguration
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration("classpath:applicationContext.xml")
 public class DaoTest {
 	
 	@Autowired
@@ -96,7 +98,12 @@ public class DaoTest {
 //		userDao.delete(user);
 	}
 	
-	
+	@Test
+	public void testJson() {
+		Message msg = new Message();
+		msg.setData("1/1.png");
+		System.out.println(JSONObject.fromObject(msg).toString());
+	}
 	
 	
 	

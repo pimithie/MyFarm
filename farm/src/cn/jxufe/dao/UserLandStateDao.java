@@ -9,4 +9,5 @@ import cn.jxufe.entity.UserLandState;
 public interface UserLandStateDao extends JpaRepository<UserLandState, Long>{
 	
 	public UserLandState findByUserIdAndLandId(int userId,int landId);
+
 }

@@ -1,5 +1,8 @@
 package cn.jxufe.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,15 +103,58 @@ public class UserLandController {
 				return true;
 			}
 		});
+		// calculate the mature time
+		Date date = new Date(System.currentTimeMillis()+seed.getTimePerQuarter()*1000);
+		String matureTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
 		if (execute) {
-			landWebSocketHandler.plant(seed, (int)((User)session.getAttribute("currentUser")).getId(), userPlantInfo.getLandId());
+			landWebSocketHandler.plant(seed, (int)((User)session.getAttribute("currentUser")).getId(), userPlantInfo.getLandId(),matureTime);
 		}
 		
 		msg.setCode(200);
 		msg.setMsg("播种成功！");
 		UserLandInfo info = new UserLandInfo();
 		info.setLandId(userPlantInfo.getLandId());
+		info.setSeed(seed);
+		info.setMatureTime(matureTime);
 		msg.setData(info);
+		return msg;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/harvest")
+	public Message harvest(int landId,HttpSession session) {
+		long id = ((User)session.getAttribute("currentUser")).getId();
+		UserLandState landState = userLandStateService.findByUserIdAndLandId((int) id, landId);
+		Seed seed = seedService.getSeedById(landState.getSeedId());
+		int fruitNum = landState.getFruitNum();
+		int profitPerFruit = seed.getProfitPerFruit();
+		landWebSocketHandler.afterHarvest((int) id, landId);
+		Message msg = new Message();
+		msg.setCode(200);
+		msg.setMsg("共收获"+seed.getSeedName()+"个,获得"+fruitNum*profitPerFruit+"个金币，"+seed.getHarvestExp()+"经验，"+seed.getPointPerQuarter()+"积分!");
+		return msg;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/cleanUp")
+	public Message cleanUp(int landId,HttpSession session) {
+		long id = ((User)session.getAttribute("currentUser")).getId();
+		landWebSocketHandler.afterCleanUp((int) id, landId);
+		Message msg = new Message();
+		msg.setCode(200);
+		msg.setMsg("除去枯草,获得经验：+1，金币：+2，积分：+2");
+		return msg;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/killInsect")
+	public Message killInsect(int landId,HttpSession session) {
+		UserLandState landState = userLandStateService.findByUserIdAndLandId((int) ((User) session.getAttribute("currentUser")).getId(), landId);
+		landState.setHasInsect(false);
+		userLandStateService.save(landState);
+		Message msg = new Message();
+		msg.setCode(200);
+		msg.setMsg("除虫成功，获得：<br/>金币：+1<br/>经验：+2<br/>积分：+1");
 		return msg;
 	}
 	
