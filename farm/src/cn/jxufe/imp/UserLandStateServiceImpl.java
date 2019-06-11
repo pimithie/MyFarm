@@ -12,6 +12,7 @@ import cn.jxufe.bean.Message;
 import cn.jxufe.dao.GrowStageDao;
 import cn.jxufe.dao.SeedDao;
 import cn.jxufe.dao.UserLandStateDao;
+import cn.jxufe.entity.GrowStage;
 import cn.jxufe.entity.UserLandState;
 import cn.jxufe.service.UserLandStateService;
 import cn.jxufe.vo.InitLandStateBean;
@@ -67,11 +68,21 @@ public class UserLandStateServiceImpl implements UserLandStateService {
 			InitLandStateBean bean = new InitLandStateBean();
 			bean.setFruitNum(landState.getFruitNum());
 			bean.setHasInsect(landState.isHasInsect());
-			bean.setGrowStage(growStageDao.findOne((long)landState.getGrowStageId()));
+			if (landState.getGrowStageId() != 0 && landState.getGrowStageId() != 6) {
+				GrowStage growStage = growStageDao.findBySeedIdAndGrowStageId(landState.getSeedId(), landState.getGrowStageId());
+				bean.setGrowStage(growStage);
+			} else if (landState.getGrowStageId() == 0) {
+				bean.setZero(true);
+			} else {
+				bean.setSix(true);
+			}
 			bean.setLandId(landState.getLandId());
-			bean.setSeed(seedDao.findOne((long)landState.getSeedId()));
+			bean.setSeed(seedDao.findBySeedId(landState.getSeedId()));
 			bean.setMatureTime(landWebSocketHandler.getMatureTime(userId, landState.getLandId()));
 			res.add(bean);
+		}
+		for (InitLandStateBean initLandStateBean : res) {
+			System.out.println(initLandStateBean);
 		}
 		Message msg = new Message();
 		msg.setCode(200);

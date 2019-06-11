@@ -279,18 +279,19 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 				success : function(res) {
 					for (var i = 0;i<res.data.length;i++) {
 						// seed
-						if (res.data[i].growStage.growStageId == 0) {
+						console.log(res.data[i]);
+						if (res.data[i].zero) {
 							var seedStage = $("<img/>");
 							$(seedStage).addClass("seed").addClass("growing");
 							$(seedStage).attr("src","<%=basePath%>images/crops/basic/0.png");
 							var tooltip = "种子名称："+res.data[i].seed.seedName+"\n";
-							tooltip = tooltip+"当前阶段：成长阶段\n"+"预期成熟时间："+res.data[i].matureTime+"\n"+"预计收获果实数："+res.data[i].harvestNum+"个";
+							tooltip = tooltip+"当前阶段：成长阶段\n"+"预期成熟时间："+res.data[i].matureTime+"\n"+"预计收获果实数："+res.data[i].fruitNum+"个";
 							$(seedStage).attr("title",tooltip);
 							$("#land"+res.data[i].landId).append(seedStage);
 							continue;
 						}
 						// end
-						if (res.data[i].growStageId == 6) {
+						if (res.data[i].six) {
 							var endImg = $("<img />");
 							$(endImg).addClass("cleanUp");
 							$(endImg).attr("src","<%=basePath%>images/crops/basic/9.png").addClass("end");
@@ -318,13 +319,13 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 							continue;
 						}
 						//--------------------
-						var imgUrl = "<%=basePath%>images/crops/"+data.data[i].seed.seedId+"/"+data.data[i].growStage.growStageId+".png";
+						var imgUrl = "<%=basePath%>images/crops/"+res.data[i].seed.seedId+"/"+res.data[i].growStage.growStageId+".png";
 				    	var image = $("<img />")
 				    	var className = "crop"+res.data[i].seed.seedId+"_"+res.data[i].growStage.growStageId;
 				    	$(image).attr("id","theCrop");
 				    	$(image).attr("src",imgUrl).addClass(className).addClass("growing");
 				    	var tooltip = "种子名称："+res.data[i].seed.seedName+"\n";
-						tooltip = tooltip+"当前阶段："+res.data[i].growStage.cropStage+"\n"+"预期成熟时间："+res.data[i].matureTime+"\n"+"预计收获果实数："+res.data[i].harvestNum+"个";
+						tooltip = tooltip+"当前阶段："+res.data[i].growStage.cropStage+"\n"+"预期成熟时间："+res.data[i].matureTime+"\n"+"预计收获果实数："+res.data[i].fruitNum+"个";
 						$(image).attr("title",tooltip);
 						if (res.data[i].growStage.growStageId == 5) {
 							$(image).removeClass("growing").addClass("harvest");
@@ -374,8 +375,8 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 									}
 								});
 							});
-				    		$("#land"+res.data[i].landId).append(insectImg);
 				    		$("#land"+res.data[i].landId).append(image);
+				    		$("#land"+res.data[i].landId).append(insectImg);
 				    		continue;
 						}
 						$("#land"+res.data[i].landId).append(image);

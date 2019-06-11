@@ -13,4 +13,7 @@ import cn.jxufe.entity.Seed;
 public interface SeedDao extends JpaRepository<Seed, Long>{
 	
 	public Page<Seed> findBySeedNameLike(Pageable pageable,String seedName);
+	
+	public Seed findBySeedId(int seedId);
+	
 }

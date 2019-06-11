@@ -16,6 +16,26 @@ public class InitLandStateBean {
 	private Seed seed;
 	
 	private String matureTime;
+	
+	private boolean isZero;
+	
+	private boolean isSix;
+	
+	public boolean isZero() {
+		return isZero;
+	}
+
+	public void setZero(boolean isZero) {
+		this.isZero = isZero;
+	}
+
+	public boolean isSix() {
+		return isSix;
+	}
+
+	public void setSix(boolean isSix) {
+		this.isSix = isSix;
+	}
 
 	public int getFruitNum() {
 		return fruitNum;
@@ -63,6 +83,12 @@ public class InitLandStateBean {
 
 	public void setMatureTime(String matureTime) {
 		this.matureTime = matureTime;
+	}
+
+	@Override
+	public String toString() {
+		return "InitLandStateBean [fruitNum=" + fruitNum + ", growStage=" + growStage + ", hasInsect=" + hasInsect
+				+ ", landId=" + landId + ", seed=" + seed + ", matureTime=" + matureTime + "]";
 	}
 	
 }
