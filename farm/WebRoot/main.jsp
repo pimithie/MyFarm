@@ -128,13 +128,13 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 		top: 480px;
 	}
 	.page {
-		margin-top: 160px;
+		margin-top: 45px;
 		margin-left: 10px;
 		margin-right: 10px;
 	}
 	.content {
 		float: left;
-		margin-top: 90px;
+		margin-top: 35px;
 		margin-left: 23px;
 		margin-right: 23px;
 	}
@@ -182,10 +182,10 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 </style>
 </head>
 <body>
-	    <div id="dd" class="easyui-dialog" title="My Dialog" style="width:600px;height:300px;"
-        data-options="iconCls:'icon-save',resizable:true,closed:true">
+	    <div id="dd" class="easyui-dialog" title="My Dialog" style="width:600px;height:200px;"
+        data-options="resizable:true,closed:true">
         		<div class="page" style="float: left;">
-        			<img width="20px" height="20px" src="<%=basePath%>images/left.png">
+        			<img id="leftImage" width="20px" height="20px" src="<%=basePath%>images/left.png">
         		</div>
         		<div id="allSeeds" style="float: left;">
         			<%-- <div class="content" style="width: 70px;text-align: center;">
@@ -214,7 +214,7 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
         			</div> --%>
         		</div>
         		<div class="page" style="float: right;">
-        			<img width="20px" height="20px" src="<%=basePath%>images/right.png">
+        			<img id="rightImage" width="20px" height="20px" src="<%=basePath%>images/right.png">
         		</div>
     	</div>
 	<div id="land0" class="normal land empty">
@@ -260,7 +260,7 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 					landType = className.split(" ")[0];
 					$("#allSeeds").html("");
 					$("#openBag")[0].play();
-					$("#dd").dialog("open");
+					$("#dd").dialog("open").dialog('setTitle', '选择种植种子');
 				}
 			});
 			// initialize websocket connection
@@ -295,12 +295,12 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 							var endImg = $("<img />");
 							$(endImg).addClass("cleanUp");
 							$(endImg).attr("src","<%=basePath%>images/crops/basic/9.png").addClass("end");
-							var cleanUpInfo = {landId:res.data[i].landId};
+							var cleanInfo = {landId:res.data[i].landId};
 							$(endImg).click(function () {
 								$.ajax({
 									type : 'post',
 									url : '<%=basePath%>userLand/cleanUp',
-									data: cleanUpInfo,
+									data: cleanInfo,
 									dataType: 'json',
 									async : true,
 									success : function(res) {
@@ -329,12 +329,12 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 						$(image).attr("title",tooltip);
 						if (res.data[i].growStage.growStageId == 5) {
 							$(image).removeClass("growing").addClass("harvest");
+							var harInfo = {landId:res.data[i].landId};
 							$(image).click(function () {
-								var harvestInfo = {landId:res.data[i].landId};
 								$.ajax({
 									type : 'post',
 									url : '<%=basePath%>userLand/harvest',
-									data: harvestInfo,
+									data: harInfo,
 									dataType: 'json',
 									async : true,
 									success : function(res) {
@@ -354,12 +354,12 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 							var insectImg = $("<img />");
 				    		$(insectImg).attr("src","<%=basePath%>images/Insect.png").addClass("insectImg");
 				    		$(insectImg).addClass("insect");
+							var killInfo = {landId:res.data[i].landId};
 				    		$(insectImg).click(function () {
-								var killInsectInfo = {landId:res.data[i].landId};
 								$.ajax({
 									type : 'post',
 									url : '<%=basePath%>userLand/killInsect',
-									data: killInsectInfo,
+									data: killInfo,
 									dataType: 'json',
 									async : true,
 									success : function(res) {
@@ -540,72 +540,113 @@ String wsBasePath = "ws://"+request.getServerName()+":"+request.getServerPort()+
 			parent.$("#container").attr("rows",'60,*,50');
 		};
 		
+		
+		var currentPage;
 		$("#dd").dialog({
 			onOpen: function() {
+				var d = {page:1,rows:4};
+				currentPage = 1;
 				$.ajax({
 					type : 'post',
-					url : '<%=basePath%>userSeedAsset/findAll',
+					url : '<%=basePath%>userSeedAsset/findCurrentUserAsset',
+					data: d,
 					async : true,
 					success : function(data) {
-						//<div class="content" style="width: 70px;text-align: center;">
-        				<%-- <p>
-							<span style="border: 1px solid red; border-radius: 20px">10</span>
-						</p>
-    					<img  width="70px" height="70px" src="<%=basePath%>images/crops/1/5.png">
-    					</div> --%>
-    					/* console.log(data); */
-    					for (var i = 0;i < data.rows.length;i++) {
-	    					var contentDiv = $("<div></div>");
-	    					var p = $("<p></p>");
-	    					var span = $("<span></span>");
-	    					var img = $("<img/>")
-	    					$(contentDiv).addClass("content").css("width","70px").css("text-align","center");
-	    					$(span).css("border","1px solid red").css("border-radius","20px");
-	    					$(span).html(data.rows[i].countOfSeed);
-	    					p.append(span);
-	    					var url = "<%=basePath%>/images/crops/"+data.rows[i].seedImage;
-	    					$(img).css("width","70px").css("height","70px").attr("src",url).attr("seedId",data.rows[i].seedId);
-	    					$(img).addClass("seedImage");
-	    					$(img).click(function (e) {
-	    						var seedId = $(e.target).attr("seedId");
-	    						var plantInfo = {seedId:seedId,landId:landId,landType:landType};
-								$.ajax({
-									type : 'post',
-									url : '<%=basePath%>userLand/plant',
-									data: JSON.stringify(plantInfo),
-									dataType: 'json',
-									contentType: 'application/json;charset=UTF-8',
-									async : true,
-									success : function(res) {
-										console.log(res);
-										$.messager.show({
-						                	title : '服务器消息',
-						                	msg : res.msg
-						                });
-										<%-- <img src=""> --%>
-										if (res.code == 200) {
-											var seedStage = $("<img/>");
-											$(seedStage).addClass("seed").addClass("growing");
-											var tooltip = "种子名称："+res.data.seed.seedName+"\n";
-											tooltip = tooltip+"当前阶段：成长阶段\n"+"预期成熟时间："+res.data.matureTime+"\n"+"预计收获果实数："+res.data.seed.harvestNum+"个";
-											$(seedStage).attr("title",tooltip);
-											$(seedStage).attr("src","<%=basePath%>images/crops/basic/0.png");
-											$("#plantCrop")[0].play();
-											$("#land"+res.data.landId).append(seedStage);
-										} else {
-											$("#negative")[0].play();
-										}
-										$("#dd").dialog("close");
-									}
-								});
-							});
-	    					$(contentDiv).append(p).append(img);
-    						$("#allSeeds").append(contentDiv);
-    					}
+    					processRows(data);
+    					$("#leftImage").click(function () {
+    						if (currentPage == 1) {
+        						$.messager.alert({
+        		                  	title : '服务器消息',
+        		                  	msg : '已经到达最前页了！',
+        		                 });
+        					} else {
+	    						$.ajax({
+	    							type : 'post',
+	    							url : '<%=basePath%>userSeedAsset/findCurrentUserAsset',
+	    							data: {"page":data.currentPage-1,"rows":4},
+	    							async : false,
+	    							success : function(data) {
+	    								currentPage = currentPage-1;
+	    								processRows(data);
+	    							}
+	    						});
+        					}
+						});
+    					$("#rightImage").click(function () {
+    						if (currentPage == data.totalPages) {
+        						$.messager.alert({
+        		                  	title : '服务器消息',
+        		                  	msg : '已经到顶了！',
+        		                 });
+        					} else {
+	    						$.ajax({
+	    							type : 'post',
+	    							url : '<%=basePath%>userSeedAsset/findCurrentUserAsset',
+	    							data: {"page":data.currentPage+1,"rows":4},
+	    							async : false,
+	    							success : function(data) {
+	    								currentPage = currentPage+1;
+	    								processRows(data);
+	    							}
+	    						});
+        					}
+						});
 					}
 				});
 			}
 		});
+		
+		function processRows(data) {
+			$("#allSeeds").html("");
+			for (var i = 0;i < data.rows.length;i++) {
+				var contentDiv = $("<div></div>");
+				var p = $("<p></p>");
+				var span = $("<span></span>");
+				var img = $("<img/>")
+				$(contentDiv).addClass("content").css("width","70px").css("text-align","center");
+				$(span).css("border","1px solid red").css("border-radius","20px").css("background-color","red");
+				$(span).html(data.rows[i].countOfSeed);
+				p.append(span);
+				var url = "<%=basePath%>/images/crops/"+data.rows[i].seedImage;
+				$(img).css("width","70px").css("height","70px").attr("src",url).attr("seedId",data.rows[i].seedId);
+				$(img).addClass("seedImage");
+				$(img).click(function (e) {
+					var seedId = $(e.target).attr("seedId");
+					var plantInfo = {seedId:seedId,landId:landId,landType:landType};
+					$.ajax({
+						type : 'post',
+						url : '<%=basePath%>userLand/plant',
+						data: JSON.stringify(plantInfo),
+						dataType: 'json',
+						contentType: 'application/json;charset=UTF-8',
+						async : true,
+						success : function(res) {
+							console.log(res);
+							$.messager.show({
+			                	title : '服务器消息',
+			                	msg : res.msg
+			                });
+							<%-- <img src=""> --%>
+							if (res.code == 200) {
+								var seedStage = $("<img/>");
+								$(seedStage).addClass("seed").addClass("growing");
+								var tooltip = "种子名称："+res.data.seed.seedName+"\n";
+								tooltip = tooltip+"当前阶段：成长阶段\n"+"预期成熟时间："+res.data.matureTime+"\n"+"预计收获果实数："+res.data.seed.harvestNum+"个";
+								$(seedStage).attr("title",tooltip);
+								$(seedStage).attr("src","<%=basePath%>images/crops/basic/0.png");
+								$("#plantCrop")[0].play();
+								$("#land"+res.data.landId).append(seedStage);
+							} else {
+								$("#negative")[0].play();
+							}
+							$("#dd").dialog("close");
+						}
+					});
+				});
+				$(contentDiv).append(p).append(img);
+				$("#allSeeds").append(contentDiv);
+			}
+		}
 		
 		
 		function checkLogin() {

@@ -19,10 +19,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<script type="text/javascript" src="<%=basePath%>ext/easyui/plugins/jquery.edatagrid.js"></script>
 		<script type="text/javascript" src="<%=basePath%>ext/easyui/locale/easyui-lang-zh_CN.js"></script>
 		<script type="text/javascript" src="<%=basePath%>ext/farm/helper.js?346t"></script>
-		<script type="text/javascript" src="<%=basePath%>ext/my/my.js"></script>
 	<style type="text/css">
 		.seedInfoContainer {
-			background-image: url(<%=basePath%>images/border.gif);
+			background-image: url(<%=basePath%>images/border.png);
 		}
 		.buy {
 			border: 0;
@@ -61,16 +60,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             container.css("margin","3% 1%").css("text-align","center");
                             container.css("background-size","100% 99%");
                             container.css("position","relative");
-                            $(container).tooltip({
-                            	position: 'right',
-                            	content:'<div>xxx</div>',
-                				onShow: function(){
-                					$(this).tooltip('tip').css({
-                						backgroundColor: '#666',
-                						borderColor: '#666'
-                					});
-                				}
-                            });
+                            var tooltip = "种子名称："+rowData.seedName+"\n季数："+rowData.quarter+"\n可收获经验："+rowData.harvestExp+"\n可收获果实数："+rowData.harvestNum+"\n所需土地类型："+rowData.landType;
+                            container.attr("title",tooltip);
                             seedImage.css("width","120px").css("height","120px").css("margin-top","10px");
                             buttonDiv.css("position","absolute").css("bottom","25px").css("left","120px");
                             buttonDiv.append(button);
@@ -90,6 +81,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             });
            	parent.$("#footer").attr("src",'<%=basePath%>bottom.jsp');
            	parent.$("#container").attr("rows",'60,*,158');
+           	setTimeout('loadData()',300);
         });
 		
 		function checkLogin() {
@@ -142,11 +134,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		
 		function refreshCurrentUserInfo(user) {
 			$(window.parent.frames["menu"].document).find('#userMoney').html("金币:"+user.money);
+			loadData();
+		}
+		
+		function loadData() {
 			$.ajax({
 				type: 'post',
 				url: '<%=basePath%>userSeedAsset/findAll',
 				success: function (data) {
 					var infoContainer = $(window.parent.frames['footer'].document).find("#userAssetInfo");
+					$(infoContainer).html("");
 					for (var i = 0;i<data.rows.length;i++) {
 						// construct the formatter of user info
 						var container = $("<div class='infoContainer'></div>");
@@ -159,7 +156,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						container.append(image);
 						infoContainer.append(container);
 					}
-					
 				}
 			});
 		}

@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cn.jxufe.bean.EasyUIData;
 import cn.jxufe.bean.EasyUIDataPageRequest;
 import cn.jxufe.bean.Message;
+import cn.jxufe.bean.PageBean;
 import cn.jxufe.dao.SeedAssetDao;
 import cn.jxufe.dao.UserDao;
+import cn.jxufe.entity.Seed;
 import cn.jxufe.entity.User;
 import cn.jxufe.entity.UserSeedAsset;
 import cn.jxufe.service.SeedAssetService;
@@ -57,6 +59,19 @@ public class UserSeedAssetController {
 	public EasyUIData<SeedAsset> getPageData(HttpSession session) {
 		User currentUser = (User) session.getAttribute("currentUser");
 		return seedAssetService.findByUserId(currentUser.getId());
+	}
+	
+	@ResponseBody
+	@RequestMapping("/findCurrentUserAsset")
+	public PageBean<SeedAsset> findCurrentUserAsset(EasyUIDataPageRequest pageRequest){
+		// create the content order
+		Sort.Order order = null;
+		order = ("asc".equals(pageRequest.getOrder())) ? new Sort.Order(Direction.ASC,pageRequest.getSort()):
+									new Sort.Order(Direction.DESC,pageRequest.getSort());
+		Pageable pageable = new PageRequest(pageRequest.getPage()-1, 
+											pageRequest.getRows(), 
+											new Sort(order));
+		return seedAssetService.findCurrentUserAsset(pageable,pageRequest.getPage(),pageRequest.getRows());
 	}
 	
 	/**

@@ -125,7 +125,10 @@ public class UserLandController {
 	@RequestMapping("/harvest")
 	public Message harvest(int landId, HttpSession session) {
 		long id = ((User) session.getAttribute("currentUser")).getId();
+		System.out.println("userId--------->"+id);
 		UserLandState landState = userLandStateService.findByUserIdAndLandId((int) id, landId);
+		System.out.println("landState--------->"+landState);
+		System.out.println("seedId--------->"+landState.getSeedId());
 		Seed seed = seedService.getSeedById(landState.getSeedId());
 		int fruitNum = landState.getFruitNum();
 		int profitPerFruit = seed.getProfitPerFruit();
